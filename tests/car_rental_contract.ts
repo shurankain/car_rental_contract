@@ -18,7 +18,7 @@ describe("car_rental_contract", () => {
         car: carAccount.publicKey,
         owner: provider.wallet.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
-      })
+      } as any)
       .signers([carAccount, provider.wallet.payer]) // Fix: Add provider wallet as signer
       .rpc();
 
