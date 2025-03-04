@@ -34,7 +34,10 @@ pub mod car_rental_contract {
     pub fn return_car(ctx: Context<ReturnCar>) -> Result<()> {
         let car = &mut ctx.accounts.car;
         let current_time = Clock::get()?.unix_timestamp;
-        require!(car.rent_end_date <= current_time, ErrorCode::RentalNotExpired);
+        require!(
+            car.rent_end_date <= current_time,
+            ErrorCode::RentalNotExpired
+        );
         car.renter_id = None;
         car.rent_end_date = 0;
         Ok(())
