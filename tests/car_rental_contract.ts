@@ -19,7 +19,7 @@ describe("car_rental_contract", () => {
         owner: provider.wallet.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       } as any)
-      .signers([carAccount, provider.wallet.payer]) // Fix: Add provider wallet as signer
+      .signers([carAccount, provider.wallet.payer])
       .rpc();
 
     console.log("Transaction Signature:", tx);
@@ -30,6 +30,41 @@ describe("car_rental_contract", () => {
     assert.equal(car.id.toNumber(), 1);
     assert.equal(car.name, "Tesla Model S");
     assert.equal(car.pricePerDay.toNumber(), 100);
+    assert.isNull(car.renterId);
+    assert.equal(car.rentEndDate.toNumber(), 0);
+  });
+
+  it("Updates price", async () => {
+    const carAccount = anchor.web3.Keypair.generate();
+
+    await program.methods
+      .addCar(new anchor.BN(1), "Tesla Model S", new anchor.BN(100))
+      .accounts({
+        car: carAccount.publicKey,
+        owner: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      } as any)
+      .signers([carAccount, provider.wallet.payer])
+      .rpc();
+
+    const tx = await program.methods
+      .updatePrice(new anchor.BN(200))
+      .accounts({
+        car: carAccount.publicKey,
+        owner: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      } as any)
+      .signers([])
+      .rpc();
+
+    console.log("Transaction Signature:", tx);
+
+    const car = await program.account.car.fetch(carAccount.publicKey);
+    console.log("Updated car price: ", car.pricePerDay);
+
+    assert.equal(car.id.toNumber(), 1);
+    assert.equal(car.name, "Tesla Model S");
+    assert.equal(car.pricePerDay.toNumber(), 200);
     assert.isNull(car.renterId);
     assert.equal(car.rentEndDate.toNumber(), 0);
   });
