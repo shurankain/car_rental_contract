@@ -46,7 +46,7 @@ pub mod car_rental_contract {
 
 #[derive(Accounts)]
 pub struct AddCar<'info> {
-    #[account(init, payer = owner, space = 8 + 64)]
+    #[account(init, payer = owner, space = 88)]
     pub car: Account<'info, Car>,
     #[account(mut)]
     pub owner: Signer<'info>,
