@@ -19,7 +19,7 @@ describe("car_rental_contract", () => {
         owner: provider.wallet.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       } as any)
-      .signers([carAccount, provider.wallet.payer])
+      .signers([carAccount])
       .rpc();
 
     console.log("Transaction Signature:", tx);
@@ -44,7 +44,7 @@ describe("car_rental_contract", () => {
         owner: provider.wallet.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       } as any)
-      .signers([carAccount, provider.wallet.payer])
+      .signers([carAccount])
       .rpc();
 
     const tx = await program.methods
@@ -79,7 +79,7 @@ describe("car_rental_contract", () => {
         owner: provider.wallet.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       } as any)
-      .signers([carAccount, provider.wallet.payer])
+      .signers([carAccount])
       .rpc();
 
     const renterId = anchor.web3.Keypair.generate().publicKey;
