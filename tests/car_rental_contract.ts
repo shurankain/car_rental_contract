@@ -109,4 +109,39 @@ describe("car_rental_contract", () => {
     assert.approximately(car.rentEndDate.toNumber(), expectedRentEndDate, 10);
   });
 
+  it("Return car", async () => {
+    const carAccount = anchor.web3.Keypair.generate();
+
+    await program.methods
+      .addCar(new anchor.BN(1), "Tesla Model S", new anchor.BN(100))
+      .accounts({
+        car: carAccount.publicKey,
+        owner: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      } as any)
+      .signers([carAccount])
+      .rpc();
+
+    const tx = await program.methods
+      .returnCar()
+      .accounts({
+        car: carAccount.publicKey,
+        owner: provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      } as any)
+      .signers([])
+      .rpc();
+
+    console.log("Transaction Signature:", tx);
+
+    const car = await program.account.car.fetch(carAccount.publicKey);
+    console.log("Car returned, renterId set to: ", car.renterId);
+
+    assert.equal(car.id.toNumber(), 1);
+    assert.equal(car.name, "Tesla Model S");
+    assert.equal(car.pricePerDay.toNumber(), 100);
+    assert.isNull(car.renterId);
+    assert.equal(car.rentEndDate.toNumber(),0);
+  });
+
 });
