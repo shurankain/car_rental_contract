@@ -25,7 +25,12 @@ describe("car_rental_contract", () => {
     console.log("Transaction Signature:", tx);
 
     const car = await program.account.car.fetch(carAccount.publicKey);
-    console.log("Added car: ", car);
+    console.log("Added car: ");
+    console.log("Car id: ", car.id.toNumber());
+    console.log("Car name: ", car.name);
+    console.log("Price per day: ", car.pricePerDay.toNumber());
+    console.log("Renter ID: ", car.renterId !== null ? car.renterId.toBase58() : car.renterId);
+    console.log("Rent end date: ", car.rentEndDate.toNumber());
 
     assert.equal(car.id.toNumber(), 1);
     assert.equal(car.name, "Tesla Model S");
@@ -60,7 +65,7 @@ describe("car_rental_contract", () => {
     console.log("Transaction Signature:", tx);
 
     const car = await program.account.car.fetch(carAccount.publicKey);
-    console.log("Updated car price: ", car.pricePerDay);
+    console.log("Updated car price: ", car.pricePerDay.toNumber());
 
     assert.equal(car.id.toNumber(), 1);
     assert.equal(car.name, "Tesla Model S");
@@ -100,7 +105,7 @@ describe("car_rental_contract", () => {
     console.log("Transaction Signature:", tx);
 
     const car = await program.account.car.fetch(carAccount.publicKey);
-    console.log("Updated car price: ", car.pricePerDay);
+    console.log("Car rented, renterId set to: ", car.renterId !== null ? car.renterId.toBase58() : car.renterId);
 
     assert.equal(car.id.toNumber(), 1);
     assert.equal(car.name, "Tesla Model S");
